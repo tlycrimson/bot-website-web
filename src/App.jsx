@@ -1,28 +1,33 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import Leaderboard from "./pages/Leaderboard";
 
 function App() {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    fetch("https://bot-website-api.onrender.com/leaderboard")
-      .then(res => res.json())
-      .then(data => setUsers(data));
-  }, []);
-
   return (
-    <div>
-      <h1>XP Leaderboard</h1>
-      <ul>
-        {users.map((u, i) => (
-          <li key={u.user_id}>
-            #{i + 1} {u.username} — {u.xp} XP
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <nav className="bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+          <span className="font-extrabold text-lg tracking-wide text-red-600">
+            MP Assistant
+          </span>
+
+
+          <div className="space-x-4">
+            <Link className="text-gray-600 hover:text-black" to="/">
+              Home
+            </Link>
+            <Link className="text-gray-600 hover:text-black" to="/leaderboard">
+              Leaderboard
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+      </Routes>
+    </>
   );
 }
 
