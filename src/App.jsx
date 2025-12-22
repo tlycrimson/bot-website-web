@@ -7,7 +7,7 @@ function App() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("https://YOUR-API.onrender.com/leaderboard")
+    fetch("https://bot-website-api.onrender.com/leaderboard")
       .then(res => res.json())
       .then(data => setUsers(data));
   }, []);
