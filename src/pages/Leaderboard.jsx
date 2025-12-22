@@ -35,7 +35,7 @@ export default function Leaderboard() {
               <span className="font-semibold">
                 #{i + 1} {u.username}
               </span>
-              <span className="font-bold text-red-400">
+              <span className="font-bold text-red-400"> 
                 {u.xp} XP
               </span>
             </li>

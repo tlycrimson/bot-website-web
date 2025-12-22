@@ -1,6 +1,9 @@
 import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Leaderboard from "./pages/Leaderboard";
+import HR from "./pages/HR";
+import LR from "./pages/LR";
+
 
 function App() {
   return (
@@ -19,6 +22,12 @@ function App() {
             <Link className="text-gray-600 hover:text-black" to="/leaderboard">
               Leaderboard
             </Link>
+            <Link to="/hrs" className="text-gray-400 hover:text-red-500">
+              HR
+            </Link>
+            <Link to="/lrs" className="text-gray-400 hover:text-red-500">
+              LR
+            </Link>
           </div>
         </div>
       </nav>
@@ -26,6 +35,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/hrs" element={<HR />} />
+        <Route path="/lrs" element={<LR />} />
       </Routes>
     </>
   );
