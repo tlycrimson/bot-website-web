@@ -201,7 +201,7 @@ export default function Leaderboard() {
                 </span>
                 <span className="font-bold">
                   {lrSort === "activity"
-                    ? `${u.activity || 0} activity`
+                    ? `${u.activity || 0} minutes`
                     : `${u.events_attended || 0} events`}
                 </span>
               </li>

@@ -9,7 +9,6 @@ export default function HierarchyTable({ headers, rows, theme, showAvatar = fals
     blue: "border-blue-500/50",
   };
 
-  // Map table headers to object keys
   const headerKeyMap = {
     "RMP Rank": "rank",
     "RMP": "rank",
@@ -32,7 +31,6 @@ export default function HierarchyTable({ headers, rows, theme, showAvatar = fals
             ))}
           </tr>
         </thead>
-
         <tbody>
           {rows.map((row, i) => {
             const isObjectRow = typeof row === "object" && !Array.isArray(row);
@@ -40,16 +38,13 @@ export default function HierarchyTable({ headers, rows, theme, showAvatar = fals
             return (
               <tr key={i} className="border-t border-white/5 hover:bg-white/5 transition">
                 {showAvatar && isObjectRow && (
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 text-center">
                     <RobloxAvatar userId={row.robloxId} username={row.username} />
                   </td>
                 )}
-
                 {headers.map((h, j) => (
                   <td key={j} className="px-4 py-3 text-center">
-                    {isObjectRow
-                      ? row[headerKeyMap[h]] ?? ""
-                      : row[j] ?? ""}
+                    {isObjectRow ? row[headerKeyMap[h]] ?? "" : row[j] ?? ""}
                   </td>
                 ))}
               </tr>

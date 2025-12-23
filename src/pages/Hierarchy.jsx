@@ -16,7 +16,7 @@ export default function Hierarchy() {
 
         {/* COMMANDING GENERALS */}
         <div className="flex justify-center relative">
-          <Section title="Royal Military Police — Commanding Generals" accent="yellow" className="text-center">
+          <Section title="Royal Military Police — Commanding Generals" accent="yellow">
             <HierarchyTable
               headers={["RMP Rank", "Username", "Army Rank"]}
               rows={[
@@ -32,10 +32,8 @@ export default function Hierarchy() {
 
         {/* DIVISIONAL COMMAND */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 relative">
-
-          {/* SOR */}
           <div className="flex justify-center relative">
-            <Section title="Special Operations Regiment" accent="orange" className="text-center">
+            <Section title="Special Operations Regiment" accent="orange">
               <HierarchyTable
                 headers={["RMP", "Username", "Army Rank"]}
                 rows={[
@@ -49,9 +47,8 @@ export default function Hierarchy() {
             <div className="absolute top-[-60px] left-1/2 w-px h-16 bg-white/30" />
           </div>
 
-          {/* PW */}
           <div className="flex justify-center relative">
-            <Section title="Provost Wing" accent="red" className="text-center">
+            <Section title="Provost Wing" accent="red">
               <HierarchyTable
                 headers={["RMP", "Username", "Army Rank"]}
                 rows={[
@@ -64,13 +61,11 @@ export default function Hierarchy() {
             </Section>
             <div className="absolute top-[-60px] left-1/2 w-px h-16 bg-white/30" />
           </div>
-
-          <div className="absolute top-0 left-0 w-full h-px bg-white/30" style={{ top: "-30px" }} />
         </div>
 
         {/* SERGEANT MAJORS */}
         <div className="flex justify-center relative">
-          <Section title="Sergeant Majors" accent="amber" className="text-center">
+          <Section title="Sergeant Majors" accent="amber">
             <HierarchyTable
               headers={["RMP", "Username", "Army Rank"]}
               rows={[
@@ -82,15 +77,14 @@ export default function Hierarchy() {
               showAvatar
             />
           </Section>
-
           <div className="absolute top-[-60px] left-[25%] w-px h-16 bg-white/30" />
           <div className="absolute top-[-60px] left-[75%] w-px h-16 bg-white/30" />
           <div className="absolute top-[-60px] left-[25%] w-[50%] h-px bg-white/30" />
         </div>
 
-        {/* QUOTAS (No avatars) */}
+        {/* QUOTAS (no avatars) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-32">
-          <Section title="High Rank Quota" accent="blue" className="text-center">
+          <Section title="High Rank Quota" accent="blue">
             <HierarchyTable
               headers={["Rank", "Requirements"]}
               rows={[
@@ -103,7 +97,7 @@ export default function Hierarchy() {
             />
           </Section>
 
-          <Section title="Low Rank Quota" accent="red" className="text-center">
+          <Section title="Low Rank Quota" accent="red">
             <HierarchyTable
               headers={["Rank", "Requirements"]}
               rows={[

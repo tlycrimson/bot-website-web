@@ -6,6 +6,7 @@ import Leaderboard from "./pages/Leaderboard";
 import HRs from "./pages/HRs";
 import LRs from "./pages/LRs";
 import Hierarchy from "./pages/Hierarchy";
+import AdminPanel from "./pages/AdminPanel";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,7 +26,7 @@ function App() {
         <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
           <span className="font-extrabold text-lg tracking-wide text-red-600">
             MP Assistant
-          </span>
+          </span> 
 
           {/* Desktop Links */}
           <div className="hidden md:flex gap-4">
@@ -84,6 +85,7 @@ function App() {
           <Route path="/hrs" element={<HRs />} />
           <Route path="/lrs" element={<LRs />} />
           <Route path="/hierarchy" element={<Hierarchy />} />
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </div>
     </>

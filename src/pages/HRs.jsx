@@ -168,7 +168,7 @@ const DivisionTable = ({ title, data, theme, tall = false }) => (
 );
 
 /* =========================
-   MAIN HR PAGE WITH TRIANGLE LAYOUT & TABLE TOGGLE
+   MAIN HR PAGE WITH TRIANGLE LAYOUT, TABLE TOGGLE, AND CTA
 ========================= */
 export default function HR() {
   const [data, setData] = useState([]);
@@ -180,27 +180,10 @@ export default function HR() {
       .then(setData);
   }, []);
 
-  // Define PW and SOR ranks explicitly to preserve correct order
-  const PW_RANKS = [
-    "PW Executive",
-    "PW Commander",
-    "Lieutenant Colonel",
-    "Major",
-    "Superintendent",
-    "Inspector",
-    "Company Sergeant Major"
-  ];
+  const PW_RANKS = ["PW Executive","PW Commander","Lieutenant Colonel","Major","Superintendent","Inspector","Company Sergeant Major"];
+  const SOR_RANKS = ["SOR Executive","SOR Commander","Squadron Executive Officer","Tactical Officer","Operations Officer","Regimental Sergeant Major"];
 
-  const SOR_RANKS = [
-    "SOR Executive",
-    "SOR Commander",
-    "Squadron Executive Officer",
-    "Tactical Officer",
-    "Operations Officer",
-    "Regimental Sergeant Major"
-  ];
-
-  const HQ = data.filter(u => u.division === "HQ").sort(sortByRank); // Only Provost Marshal
+  const HQ = data.filter(u => u.division === "HQ").sort(sortByRank);
   const PW = data.filter(u => u.division === "PW" && PW_RANKS.includes(u.rank)).sort(sortByRank);
   const SOR = data.filter(u => u.division === "SOR" && SOR_RANKS.includes(u.rank)).sort(sortByRank);
 
@@ -250,11 +233,28 @@ export default function HR() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-black px-6 py-16 text-white">
-      <h1 className="text-5xl md:text-6xl font-extrabold text-center mb-8 tracking-tight text-white-600">
-          High Ranks
-        </h1>
-      
+      <h1 className="text-5xl md:text-6xl font-extrabold text-center mb-8 tracking-tight text-white">
+        High Ranks
+      </h1>
 
+      {/* CTA Section */}
+      <div className="max-w-md mx-auto mb-12 animate-pulse-slow">
+        <div className="bg-white/10 backdrop-blur rounded-2xl p-6 text-center hover:bg-white/20 transition">
+          <h2 className="text-2xl font-bold mb-3 text-red-400">Join the PW HR Team</h2>
+          <p className="text-sm text-zinc-200 mb-4">
+            Interested in helping manage the Royal Military Police? Apply now to join the Provost Wing HR team.
+          </p>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdvDX6ADEJOIWTWUiaGb-vc_ga0SddKuu6skh8rre9RybQ5bw/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-6 py-3 bg-red-600 text-white font-semibold rounded-xl shadow-lg 
+                       hover:bg-red-700 transition transform hover:scale-105 hover:shadow-2xl duration-300"
+          >
+            Apply Now
+          </a>
+        </div>
+      </div>
 
       {/* Toggle Buttons */}
       <div className="flex justify-center gap-4 mb-12 flex-wrap">

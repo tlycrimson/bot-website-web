@@ -1,100 +1,103 @@
+import { Link } from "react-router-dom";
+import { Users, Table, Trophy, Layout } from "lucide-react";
 import { motion } from "framer-motion";
-import { Users, Table, Trophy } from "lucide-react";
 
 export default function Home() {
+  const buttons = [
+    {
+      title: "View Hierarchy",
+      link: "/hierarchy",
+      icon: <Layout className="w-5 h-5 inline mr-2" />,
+      style: "bg-red-600 hover:bg-red-700 text-white",
+    },
+    {
+      title: "View High Rank Tables",
+      link: "/hrs",
+      icon: <Table className="w-5 h-5 inline mr-2" />,
+      style: "bg-black/30 border border-red-500 text-red-300 hover:bg-red-600 hover:text-white",
+    },
+    {
+      title: "View Low Rank Tables",
+      link: "/lrs",
+      icon: <Table className="w-5 h-5 inline mr-2" />,
+      style: "bg-black/30 border border-red-500 text-red-300 hover:bg-red-600 hover:text-white",
+    },
+    {
+      title: "View Leaderboards",
+      link: "/leaderboard",
+      icon: <Trophy className="w-5 h-5 inline mr-2" />,
+      style: "bg-black/30 border border-red-500 text-red-300 hover:bg-red-600 hover:text-white",
+    },
+  ];
+
   return (
-    <div className="flex flex-col bg-black text-white min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-red-900 text-white flex flex-col justify-center items-center px-6">
+      {/* Hero Heading */}
+      <motion.h1
+        className="text-5xl md:text-6xl font-extrabold tracking-wide mb-6 text-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        MP Assistant
+      </motion.h1>
 
-      {/* Hero Section */}
-      <section className="flex-grow flex flex-col items-center justify-center text-center px-6">
-        <motion.h1
-          className="text-5xl md:text-6xl font-extrabold tracking-wide mb-4"
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          MP Assistant
-        </motion.h1>
-        <motion.p
-          className="text-xl text-red-200 mb-10 max-w-2xl"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1, delay: 0.2 }}
-        >
-          A dedicated assistant for the Royal Military Police, helping you manage hierarchy, ranks, and leaderboards efficiently.
-        </motion.p>
+      <motion.p
+        className="text-xl text-red-200 mb-12 text-center max-w-2xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+      >
+        A dedicated assistant for the Royal Military Police — streamline hierarchy, rank tables, and leaderboards in one place.
+      </motion.p>
 
-        {/* Action Buttons */}
-        <motion.div
-          className="flex justify-center gap-4 flex-wrap mb-16"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.4 }}
-        >
-          <a
-            href="/hierarchy"
-            className="bg-red-600 hover:bg-red-700 transition px-8 py-4 rounded-xl font-semibold shadow-lg transform hover:scale-105"
-          >
-            View Hierarchy
-          </a>
-          <a
-            href="/hrs"
-            className="border border-red-500 text-red-300 hover:bg-red-600 hover:text-white transition px-8 py-4 rounded-xl font-semibold transform hover:scale-105"
-          >
-            High Rank Tables
-          </a>
-          <a
-            href="/lrs"
-            className="border border-red-500 text-red-300 hover:bg-red-600 hover:text-white transition px-8 py-4 rounded-xl font-semibold transform hover:scale-105"
-          >
-            Low Rank Tables
-          </a>
-          <a
-            href="/leaderboard"
-            className="border border-red-500 text-red-300 hover:bg-red-600 hover:text-white transition px-8 py-4 rounded-xl font-semibold transform hover:scale-105"
-          >
-            Leaderboards
-          </a>
-        </motion.div>
-      </section>
-
-      {/* Features Section */}
-      <section className="bg-zinc-900 py-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-12">Features</h2>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Buttons */}
+      <div className="flex flex-wrap justify-center gap-6 mb-12">
+        {buttons.map((btn, i) => (
           <motion.div
-            className="bg-zinc-800 p-6 rounded-xl shadow-lg flex flex-col items-center hover:scale-105 transition"
-            whileHover={{ scale: 1.05 }}
+            key={btn.title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 * i }}
           >
-            <Users className="w-12 h-12 text-red-500 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Hierarchy Management</h3>
-            <p className="text-center">Admins with HICOM role can edit server hierarchy easily.</p>
+            <Link
+              to={btn.link}
+              className={`flex items-center justify-center px-8 py-4 rounded-2xl font-semibold shadow-lg transition transform hover:scale-105 ${btn.style}`}
+            >
+              {btn.icon}
+              {btn.title}
+            </Link>
           </motion.div>
+        ))}
+      </div>
 
-          <motion.div
-            className="bg-zinc-800 p-6 rounded-xl shadow-lg flex flex-col items-center hover:scale-105 transition"
-            whileHover={{ scale: 1.05 }}
-          >
-            <Table className="w-12 h-12 text-red-500 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Rank Tables</h3>
-            <p className="text-center">Access high and low rank tables to track personnel efficiently.</p>
-          </motion.div>
-
-          <motion.div
-            className="bg-zinc-800 p-6 rounded-xl shadow-lg flex flex-col items-center hover:scale-105 transition"
-            whileHover={{ scale: 1.05 }}
-          >
-            <Trophy className="w-12 h-12 text-red-500 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Leaderboards</h3>
-            <p className="text-center">Monitor performance stats and see who’s topping the charts.</p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Join HR Teams Section */}
+      <motion.div
+        className="bg-white/10 backdrop-blur rounded-2xl p-6 text-center max-w-md hover:bg-white/20 transition"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      >
+        <h2 className="text-2xl font-bold mb-3 text-red-400">
+          Join our HR Teams
+        </h2>
+        <p className="text-sm text-zinc-200 mb-4">
+          Interested in helping manage the Royal Military Police? Apply now to join the Provost Wing HR team.
+        </p>
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdvDX6ADEJOIWTWUiaGb-vc_ga0SddKuu6skh8rre9RybQ5bw/viewform"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block px-6 py-3 bg-red-600 text-white font-semibold rounded-xl shadow-lg hover:bg-red-700 transition"
+        >
+          Apply Now
+        </a>
+      </motion.div>
 
       {/* Footer */}
-      <footer className="text-center py-6 text-zinc-400">
-        &copy; 2025 MP Assistant — Built exclusively for the Royal Military Police regiment.
-      </footer>
+      <p className="text-sm text-zinc-400 text-center mt-12">
+        Private utility bot — built exclusively for this regiment.
+      </p>
     </div>
   );
 }
