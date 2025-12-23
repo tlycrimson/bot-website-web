@@ -9,7 +9,7 @@ export default function Section({ title, accent, children }) {
 
   return (
     <div>
-      <h2 className={`text-2xl font-extrabold mb-6 tracking-wide ${accentMap[accent]}`}>
+      <h2 className={`text-2xl font-extrabold mb-6 tracking-wide text-center ${accentMap[accent]}`}>
         {title}
       </h2>
       {children}
