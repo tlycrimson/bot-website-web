@@ -194,7 +194,7 @@ const DivisionTable = ({ title, data, theme, tall = false }) => (
         >
           {/* Top row */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
               <RankInsignia rank={user.rank} />
               <span className="font-semibold truncate">
                 {user.username}
@@ -205,7 +205,7 @@ const DivisionTable = ({ title, data, theme, tall = false }) => (
           </div>
 
           {/* Stats (RANK-BASED + HIGHLIGHTED) */}
-          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+          <div className="mt-3 flex flex-nowrap gap-2 text-xs overflow-x-auto">
             {Object.entries(user)
               .filter(([key]) => {
                 if (
@@ -220,7 +220,7 @@ const DivisionTable = ({ title, data, theme, tall = false }) => (
               .map(([key, value]) => (
                 <span
                   key={key}
-                  className={`px-3 py-1 rounded-full ${getHighlightClass(value, user.division)}`}
+                  className={`px-2 py-0.5 rounded-full ${getHighlightClass(value, user.division)}`}
                 >
                   {(STAT_LABELS[key] ?? key.replace(/_/g, " "))}: {value}
                 </span>
@@ -300,24 +300,31 @@ export default function HR() {
         </div>
 
         {/* PW — BOTTOM LEFT (TALL) */}
-        <div className="lg:col-span-2">
-        <DivisionTable
-            title="Provost Wing"
-            data={PW}
-            theme="bg-gradient-to-br from-red-700 via-red-800 to-red-900"
-            tall
-        />
+        <div className="lg:col-span-2 flex justify-center">
+          <div className="w-full lg:max-w-3xl">
+            <DivisionTable
+              title="Provost Wing"
+              data={PW}
+              theme="bg-gradient-to-br from-red-700 via-red-800 to-red-900"
+              tall
+            />
+          </div>
         </div>
 
+
         {/* SOR — BOTTOM RIGHT (TALL) */}
-        <div className="lg:col-span-2">
-        <DivisionTable
-            title="Special Operations Regiment"
-            data={SOR}
-            theme="bg-gradient-to-br from-zinc-800 via-zinc-900 to-black border border-zinc-600"
-            tall
-        />
+        <div className="lg:col-span-2 flex justify-center">
+          <div className="w-full lg:max-w-3xl">
+            <DivisionTable
+              title="Special Operations Regiment"
+              data={SOR}
+              theme="bg-gradient-to-br from-zinc-800 via-zinc-900 to-black border border-zinc-600"
+              tall
+            />
+          </div>
         </div>
+
+
 
       </div>
     </div>

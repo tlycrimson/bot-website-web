@@ -14,6 +14,14 @@ export default function Home() {
         </p>
 
         <div className="flex justify-center gap-4 flex-wrap">
+
+          <Link
+            to="/hierarchy"
+            className="bg-red-600 hover:bg-red-700 transition px-8 py-4 rounded-xl font-semibold shadow-lg"
+          >
+            View Hierarchy
+          </Link>
+
           <Link
             to="/hrs"
             className="border border-red-500 text-red-300 hover:bg-red-600 hover:text-white transition px-8 py-4 rounded-xl font-semibold"
@@ -32,8 +40,9 @@ export default function Home() {
             to="/leaderboard"
             className="border border-red-500 text-red-300 hover:bg-red-600 hover:text-white transition px-8 py-4 rounded-xl font-semibold"
           >
-            View XP Leaderboard
+            View Leaderboards
           </Link>
+
         </div>
 
         <p className="text-sm text-zinc-400 mt-10">

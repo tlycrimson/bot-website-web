@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Leaderboard from "./pages/Leaderboard";
 import HRs from "./pages/HRs";
 import LRs from "./pages/LRs";
+import Hierarchy from "./pages/Hierarchy";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/hrs" element={<HRs />} />
         <Route path="/lrs" element={<LRs />} />
+        <Route path="/hierarchy" element={<Hierarchy />} />
       </Routes>
     </>
   );
