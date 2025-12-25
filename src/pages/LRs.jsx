@@ -108,7 +108,7 @@ export default function LRs() {
   const [selectedTables, setSelectedTables] = useState(["SergeantMajors", "PW", "SOR"]);
 
   useEffect(() => {
-    fetch("https://bot-website-api.onrender.com/lr")
+    fetch("https://bot-website-api.onrender.com/public/lr")
       .then((res) => res.json())
       .then(setLrs);
   }, []);

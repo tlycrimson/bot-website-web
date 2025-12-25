@@ -175,7 +175,7 @@ export default function HR() {
   const [selectedTables, setSelectedTables] = useState(["HQ", "PW", "SOR"]);
 
   useEffect(() => {
-    fetch("https://bot-website-api.onrender.com/hr")
+    fetch("https://bot-website-api.onrender.com/public/hr")
       .then(res => res.json())
       .then(setData);
   }, []);

@@ -62,15 +62,15 @@ export default function Leaderboard() {
      FETCH DATA
   ===================== */
   useEffect(() => {
-    fetch("https://bot-website-api.onrender.com/leaderboard")
+    fetch("https://bot-website-api.onrender.com/public/leaderboard")
       .then((res) => res.json())
       .then(setXpUsers);
 
-    fetch("https://bot-website-api.onrender.com/hr")
+    fetch("https://bot-website-api.onrender.com/public/hr")
       .then((res) => res.json())
       .then(setHrs);
 
-    fetch("https://bot-website-api.onrender.com/lr")
+    fetch("https://bot-website-api.onrender.com/public/lr")
       .then((res) => res.json())
       .then(setLrs);
   }, []);
