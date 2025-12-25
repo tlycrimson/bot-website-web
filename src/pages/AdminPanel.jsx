@@ -77,7 +77,7 @@ const highCommandRanks = [
   "PW Executive"
 ];
 
-const API_BASE = "https://bot-website-api.onrender.com";
+const API_BASE = import.meta.env.VITE_API_BASE || "https://bot-website-api.onrender.com";
 
 export default function AdminPanel() {
   const { getAuthHeaders, logout } = useAuth();

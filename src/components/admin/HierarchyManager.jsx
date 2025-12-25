@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
-const API_BASE = "https://bot-website-api.onrender.com";
+const API_BASE = import.meta.env.VITE_API_BASE || "https://bot-website-api.onrender.com";
 
 export default function HierarchyManager() {
   const { getAuthHeaders } = useAuth();

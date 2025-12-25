@@ -4,7 +4,7 @@ import Section from "../components/hierarchy/Section";
 import HierarchyTable from "../components/hierarchy/HierarchyTable";
 import { Shield, Loader2 } from "lucide-react";
 
-const API_BASE = "https://bot-website-api.onrender.com";
+const API_BASE = import.meta.env.VITE_API_BASE || "https://bot-website-api.onrender.com";
 
 export default function Hierarchy() {
   const { user } = useAuth();

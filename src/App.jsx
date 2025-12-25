@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { Routes, Route, NavLink, Navigate } from "react-router-dom"; 
+import { useState, useEffect, useRef } from "react";
+import { Routes, Route, NavLink, Navigate, useLocation } from "react-router-dom"; 
 import { Menu, X, Shield, Layers } from "lucide-react";
+import RMPBotIcon from "./assets/RMP_Bot_icon.png";
 import Home from "./pages/Home";
 import Leaderboard from "./pages/Leaderboard";
+import XPLeaderboard from "./pages/XPLeaderboard";
 import HRs from "./pages/HRs";
 import LRs from "./pages/LRs";
 import Hierarchy from "./pages/Hierarchy";
@@ -25,19 +27,40 @@ function App() {
     { to: "/lrs", label: "LRs" },
   ];
 
-  // Check if current path is an admin route
-  const isAdminRoute = window.location.pathname.startsWith('/admin');
+  // Reactive admin route detection
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  // Mobile menu ref & accessibility helpers
+  const mobileMenuRef = useRef(null);
+
+  useEffect(() => {
+    if (menuOpen) {
+      // focus the first interactive element inside the mobile menu
+      const el = mobileMenuRef.current?.querySelector('a,button');
+      if (el) el.focus();
+    }
+  }, [menuOpen]);
+
+  // Close mobile menu with Escape key
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   return (
     <>
       {/* Navigation Bar */}
-      <nav className="bg-black fixed w-full z-50 shadow-md">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <span className="font-extrabold text-lg tracking-wide text-red-600">
-              MP Assistant
-            </span>
-            
+      <nav className="bg-black/60 backdrop-blur-sm fixed w-full z-50 shadow-md" role="navigation" aria-label="Main navigation">
+        <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-20 focus:left-4 bg-white/5 px-3 py-2 rounded-md">Skip to content</a>
+        <div className="max-w-6xl mx-auto px-4 py-2 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <NavLink to="/" className="flex items-center gap-3" aria-label="MP Assistant Home">
+              <img src={RMPBotIcon} alt="RMP Bot" className="w-8 h-8 rounded-md object-cover" loading="lazy" decoding="async" />
+              <span className="font-extrabold text-base tracking-wide text-red-600">MP Assistant</span>
+            </NavLink>
+
             {/* Admin badge if logged in and on admin routes */}
             {isAuthenticated && isAuthorized && user && isAdminRoute && (
               <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-red-900/30 border border-red-800/30 rounded-lg">
@@ -56,8 +79,8 @@ function App() {
                   to="/admin"
                   className={({ isActive }) =>
                     isActive
-                      ? "bg-red-600 text-white px-3 py-1 rounded-md font-semibold transition flex items-center gap-2"
-                      : "text-white hover:text-red-400 px-3 py-1 rounded-md transition flex items-center gap-2"
+                      ? "bg-red-600 text-white px-3 py-1 rounded-md font-semibold transition flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                      : "text-white hover:text-red-400 px-3 py-1 rounded-md transition flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                   }
                 >
                   <Shield size={16} />
@@ -93,8 +116,8 @@ function App() {
                     to={link.to}
                     className={({ isActive }) =>
                       isActive
-                        ? "bg-red-600 text-white px-3 py-1 rounded-md font-semibold transition"
-                        : "text-white hover:text-red-400 px-3 py-1 rounded-md transition"
+                        ? "bg-red-600 text-white px-3 py-1 rounded-md font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                        : "text-white hover:text-red-400 px-3 py-1 rounded-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                     }
                   >
                     {link.label}
@@ -110,8 +133,8 @@ function App() {
                         to="/admin"
                         className={({ isActive }) =>
                           isActive
-                            ? "bg-red-600 text-white px-3 py-1 rounded-md font-semibold transition"
-                            : "text-white hover:text-red-400 px-3 py-1 rounded-md transition"
+                            ? "bg-red-600 text-white px-3 py-1 rounded-md font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                            : "text-white hover:text-red-400 px-3 py-1 rounded-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                         }
                       >
                         Admin
@@ -149,7 +172,10 @@ function App() {
           <div className="md:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="text-white focus:outline-none"
+              className="text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded-md"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+              aria-label="Toggle navigation menu"
             >
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -158,7 +184,7 @@ function App() {
 
         {/* Mobile Menu */}
         {menuOpen && (
-          <div className="md:hidden bg-black px-4 pb-4">
+          <div id="mobile-menu" ref={mobileMenuRef} className="md:hidden bg-black px-4 pb-4" aria-hidden={!menuOpen}>
             {isAdminRoute ? (
               // Admin mobile navigation
               <div className="space-y-2">
@@ -167,8 +193,8 @@ function App() {
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
                     isActive
-                      ? "block bg-red-600 text-white px-3 py-2 rounded-md font-semibold transition flex items-center gap-2"
-                      : "block text-white hover:text-red-400 px-3 py-2 rounded-md transition flex items-center gap-2"
+                    ? "block bg-red-600 text-white px-3 py-2 rounded-md font-semibold transition flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                    : "block text-white hover:text-red-400 px-3 py-2 rounded-md transition flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                   }
                 >
                   <Shield size={16} />
@@ -207,8 +233,8 @@ function App() {
                     onClick={() => setMenuOpen(false)}
                     className={({ isActive }) =>
                       isActive
-                        ? "block bg-red-600 text-white px-3 py-2 rounded-md font-semibold mb-2 transition"
-                        : "block text-white hover:text-red-400 px-3 py-2 rounded-md mb-2 transition"
+                        ? "block bg-red-600 text-white px-3 py-2 rounded-md font-semibold mb-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                        : "block text-white hover:text-red-400 px-3 py-2 rounded-md mb-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                     }
                   >
                     {link.label}
@@ -262,11 +288,12 @@ function App() {
       </nav>
 
       {/* Page Routes */}
-      <div className="pt-20 bg-black min-h-screen">
+      <main id="main" className="pt-20 bg-black min-h-screen">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/users" element={<XPLeaderboard />} />
           <Route path="/hrs" element={<HRs />} />
           <Route path="/lrs" element={<LRs />} />
           <Route path="/hierarchy" element={<Hierarchy />} />
@@ -294,7 +321,7 @@ function App() {
           {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </div>
+      </main>
     </>
   );
 }

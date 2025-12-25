@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Shield, Users, Award, Star, Target } from "lucide-react";
 
-const API_BASE = "https://bot-website-api.onrender.com";
+const API_BASE = import.meta.env.VITE_API_BASE || "https://bot-website-api.onrender.com";
 
 export default function HierarchyDisplay() {
   const [hierarchyData, setHierarchyData] = useState([]);

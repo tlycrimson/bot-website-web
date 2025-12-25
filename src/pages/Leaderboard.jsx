@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+const API_BASE = import.meta.env.VITE_API_BASE || "https://bot-website-api.onrender.com";
 
 /* =====================
    PODIUM STYLING
@@ -61,19 +63,68 @@ export default function Leaderboard() {
   /* =====================
      FETCH DATA
   ===================== */
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [contentVisible, setContentVisible] = useState(false);
+
+  // Retry cooldown: avoid repeated manual retries (2 minute cooldown)
+  const [lastRetryAt, setLastRetryAt] = useState(0);
+  const [retryTimer, setRetryTimer] = useState(0);
+  const RETRY_COOLDOWN_MS = 2 * 60 * 1000;
+  const canRetry = () => !lastRetryAt || (Date.now() - lastRetryAt) > RETRY_COOLDOWN_MS;
+
   useEffect(() => {
-    fetch("https://bot-website-api.onrender.com/public/leaderboard")
-      .then((res) => res.json())
-      .then(setXpUsers);
+    if (!lastRetryAt) { setRetryTimer(0); return; }
+    const id = setInterval(() => {
+      const rem = Math.ceil((RETRY_COOLDOWN_MS - (Date.now() - lastRetryAt)) / 1000);
+      if (rem <= 0) { setRetryTimer(0); clearInterval(id); }
+      else setRetryTimer(rem);
+    }, 1000);
+    return () => clearInterval(id);
+  }, [lastRetryAt]);
 
-    fetch("https://bot-website-api.onrender.com/public/hr")
-      .then((res) => res.json())
-      .then(setHrs);
+  const Spinner = ({ className = "w-10 h-10" }) => (
+    <div role="status" className={`mx-auto ${className} rounded-full border-4 border-white/20 border-t-white animate-spin`} aria-label="Loading" />
+  );
 
-    fetch("https://bot-website-api.onrender.com/public/lr")
-      .then((res) => res.json())
-      .then(setLrs);
+  const fetchData = async (signal) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [xpRes, hrRes, lrRes] = await Promise.all([
+        fetch(`${API_BASE}/public/leaderboard`, { signal }),
+        fetch(`${API_BASE}/public/hr`, { signal }),
+        fetch(`${API_BASE}/public/lr`, { signal })
+      ]);
+
+      if (!xpRes.ok || !hrRes.ok || !lrRes.ok) throw new Error('Failed to fetch one or more leaderboard endpoints');
+
+      const [xpJson, hrJson, lrJson] = await Promise.all([xpRes.json(), hrRes.json(), lrRes.json()]);
+
+      setXpUsers(xpJson || []);
+      setHrs(hrJson || []);
+      setLrs(lrJson || []);
+    } catch (err) {
+      if (err.name !== 'AbortError') setError(err.message || String(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchData(controller.signal);
+    return () => controller.abort();
   }, []);
+
+  // Fade-in when data first arrives
+  useEffect(() => {
+    if (!loading) {
+      const t = setTimeout(() => setContentVisible(true), 40);
+      return () => clearTimeout(t);
+    }
+    setContentVisible(false);
+  }, [loading]);
 
   /* =====================
      DERIVED LEADERBOARDS
@@ -99,13 +150,53 @@ export default function Leaderboard() {
         Leaderboards
       </h1>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+      {loading && (
+        <div className="text-center py-24">
+          <Spinner className="w-12 h-12 mb-4" />
+          <div>Loading leaderboards…</div>
+        </div>
+      )}
+
+      {error && (
+        <div className="text-center py-24 text-red-400">
+          <p className="mb-4">Error loading leaderboards: {error}</p>
+          <button
+            onClick={() => {
+              if (!canRetry()) return;
+              setLastRetryAt(Date.now());
+              setRetryTimer(Math.ceil(RETRY_COOLDOWN_MS / 1000));
+              fetchData();
+            }}
+            className="px-4 py-2 bg-red-600 rounded-md"
+            disabled={!canRetry()}
+          >
+            {retryTimer > 0 ? `Retry (${retryTimer}s)` : "Retry"}
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && (xpUsers.length + hrs.length + lrs.length === 0) && (
+        <div className="text-center py-24">
+          <Spinner className="w-12 h-12 mb-4" />
+          <div className="italic opacity-70 mb-4">Waiting for leaderboard data…</div>
+        </div>
+      )}
+
+      {!loading && !error && (xpUsers.length + hrs.length + lrs.length > 0) && (
+        <div className={`max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 transition-all duration-700 ease-out ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'}`}>
 
         {/* ================= XP LEADERBOARD ================= */}
         <div className="bg-zinc-900 rounded-2xl p-6 shadow-2xl border border-red-800">
-          <h2 className="text-2xl font-extrabold text-center mb-6">
-            🏆 XP Leaderboard
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-extrabold">🏆 XP Leaderboard</h2>
+            <Link
+              to="/users"
+              className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition"
+              aria-label="View all users"
+            >
+              View all users
+            </Link>
+          </div>
 
           <ul className="space-y-4">
             {xpLeaderboard.map((u, i) => (
@@ -210,6 +301,7 @@ export default function Leaderboard() {
         </div>
 
       </div>
+      )}
     </div>
   );
 }

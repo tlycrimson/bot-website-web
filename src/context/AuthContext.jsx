@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const API_BASE = "https://bot-website-api.onrender.com";
+const API_BASE = import.meta.env.VITE_API_BASE || "https://bot-website-api.onrender.com";
 
 const AuthContext = createContext();
 
@@ -55,10 +55,32 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const loginWithDiscord = () => {
+  const loginWithDiscord = async () => {
     // Let the API generate an OAuth URL. Pass current frontend origin as `next`
     const next = encodeURIComponent(window.location.origin);
-    window.location.href = `${API_BASE}/auth/discord/login?next=${next}`;
+
+    try {
+      const res = await fetch(`${API_BASE}/auth/discord/login?next=${next}`);
+      if (!res.ok) {
+        // Try to parse JSON error detail
+        let err = null;
+        try { err = await res.json(); } catch (e) { err = { detail: res.statusText }; }
+        console.error('Failed to start Discord login:', err);
+        throw new Error(err?.detail || 'Failed to start Discord login');
+      }
+
+      const data = await res.json();
+      if (data?.auth_url) {
+        window.location.href = data.auth_url;
+      } else {
+        // Fallback: redirect to the API login endpoint (server should redirect to Discord)
+        window.location.href = `${API_BASE}/auth/discord/login?next=${next}`;
+      }
+    } catch (error) {
+      console.error('loginWithDiscord error:', error);
+      // Let callers handle errors (UI can catch this when calling loginWithDiscord)
+      throw error;
+    }
   };
 
   const handleDiscordCallback = async (code) => {
