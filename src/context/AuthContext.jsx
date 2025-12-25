@@ -56,12 +56,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const loginWithDiscord = () => {
-    window.location.href = `${API_BASE}/auth/discord/login`;
+    // Let the API generate an OAuth URL. Pass current frontend origin as `next`
+    const next = encodeURIComponent(window.location.origin);
+    window.location.href = `${API_BASE}/auth/discord/login?next=${next}`;
   };
 
   const handleDiscordCallback = async (code) => {
     try {
-      const response = await fetch(`${API_BASE}/auth/callback?code=${code}`);
+      const response = await fetch(`${API_BASE}/auth/callback?code=${code}&format=json`);
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('admin_token', data.token);

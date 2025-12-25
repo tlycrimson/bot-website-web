@@ -37,33 +37,52 @@ const LoginPage = () => {
   // Function to handle Discord login - DIRECT OAuth URL
   const handleDiscordLogin = () => {
     setLoading(true);
-    
-    // The redirect_uri MUST match exactly what's in Discord Developer Portal
-    // For your backend API (not frontend!)
-    const redirectUri = 'https://bot-website-api.onrender.com/auth/callback';
-    
-    // CRITICAL: redirect_uri must be URL-encoded
-    const encodedRedirectUri = encodeURIComponent(redirectUri);
-    
-    // Construct the Discord OAuth URL directly
-    const discordAuthUrl = 
-      'https://discord.com/api/oauth2/authorize' +
-      '?client_id=1352437331344228394' + // Your Client ID
-      `&redirect_uri=${encodedRedirectUri}` + // Use the encoded URI
-      '&response_type=code' +
-      '&scope=identify+guilds.members.read';
-    
-    console.log('Redirecting to Discord OAuth:', discordAuthUrl);
-    window.location.href = discordAuthUrl;
+
+    // Preferred flow: ask backend for an OAuth URL and include the current frontend
+    // origin so the backend can return to the correct UI after auth.
+    const next = encodeURIComponent(window.location.origin);
+    const apiUrl = `https://bot-website-api.onrender.com/auth/discord/login?next=${next}`;
+
+    // Try API-based flow first (recommended)
+    fetch(apiUrl)
+      .then((res) => {
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        if (data.auth_url) {
+          window.location.href = data.auth_url;
+          return;
+        }
+
+        // Fallback: if API didn't return an auth_url, construct a direct URL
+        // Note: direct redirect_uri must match what's registered in Discord app.
+        const fallbackRedirect = `${window.location.origin}/auth/callback`;
+        const encodedFallback = encodeURIComponent(fallbackRedirect);
+        const discordAuthUrl =
+          'https://discord.com/api/oauth2/authorize' +
+          '?client_id=1352437331344228394' +
+          `&redirect_uri=${encodedFallback}` +
+          '&response_type=code' +
+          '&scope=identify+guilds.members.read';
+
+        console.warn('API did not provide auth_url, using fallback:', discordAuthUrl);
+        window.location.href = discordAuthUrl;
+      })
+      .catch((err) => {
+        console.error('Failed to start Discord login:', err);
+        setLoading(false);
+      });
   };
 
   // Alternative: Keep API-based approach (if you prefer)
   const handleDiscordLoginViaAPI = async () => {
     try {
       setLoading(true);
-      
+      // Include current origin so backend can craft a redirect that returns here
+      const next = encodeURIComponent(window.location.origin);
       // Fetch the Discord OAuth URL from your API
-      const response = await fetch('https://bot-website-api.onrender.com/auth/discord/login');
+      const response = await fetch(`https://bot-website-api.onrender.com/auth/discord/login?next=${next}`);
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -81,7 +100,7 @@ const LoginPage = () => {
     } catch (error) {
       console.error('Failed to start Discord login via API:', error);
       setLoading(false);
-      // Fallback to direct method
+      // Fallback to direct method (which itself tries API first)
       handleDiscordLogin();
     }
   };
@@ -182,7 +201,8 @@ const LoginPage = () => {
               <p className="text-xs text-gray-500 text-center">
                 <strong>Debug Info:</strong> Using direct OAuth URL
                 <br />
-                Redirect URI: https://bot-website-api.onrender.com/auth/callback
+                Redirect URI (backend callback): https://bot-website-api.onrender.com/auth/callback
+                Frontend origin sent as `next`: {window.location.origin}
                 <br />
                 Client ID: 1352437331344228394
               </p>
