@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import { AuthProvider } from "./context/AuthContext";
-import RMPBotIcon from "./assets/RMP_Bot_icon.png?url";
+import RMPBotIcon from "./assets/RMP_Bot_icon.png";
 
 // Set favicon at runtime so we're using the bundled asset (works in dev and prod)
 (function setFavicon() {
