@@ -110,7 +110,7 @@ export default function XPLeaderboard() {
                   {top3[1] ? (
                     <div className={`rounded-xl p-4 border shadow-md transition-all duration-700 ease-out w-full max-w-xs ${getPodiumStyle(1)}`} style={{ animationDelay: `180ms` }}>
                       <div className="text-sm opacity-80">#2</div>
-                      <div className="font-semibold truncate text-lg">{top3[1].username}</div>
+                      <div className="font-semibold truncate text-lg"><Link to={`/users/${top3[1].user_id}`} className="hover:underline">{top3[1].username}</Link></div>
                       <div className="font-bold">{top3[1].xp} XP</div>
                     </div>
                   ) : <div className="w-full max-w-xs" />}
@@ -121,7 +121,7 @@ export default function XPLeaderboard() {
                   {top3[0] ? (
                     <div className={`rounded-2xl p-6 border shadow-2xl transition-all duration-700 ease-out w-full max-w-md ${getPodiumStyle(0)}`} style={{ transform: 'translateY(-12px)', animationDelay: `60ms` }}>
                       <div className="text-sm opacity-80">#1</div>
-                      <div className="font-extrabold truncate text-2xl">{top3[0].username}</div>
+                      <div className="font-extrabold truncate text-2xl"><Link to={`/users/${top3[0].user_id}`} className="hover:underline">{top3[0].username}</Link></div>
                       <div className="font-bold text-lg">{top3[0].xp} XP</div>
                     </div>
                   ) : <div className="w-full max-w-md" />}
@@ -132,7 +132,7 @@ export default function XPLeaderboard() {
                   {top3[2] ? (
                     <div className={`rounded-xl p-4 border shadow-md transition-all duration-700 ease-out w-full max-w-xs ${getPodiumStyle(2)}`} style={{ animationDelay: `240ms` }}>
                       <div className="text-sm opacity-80">#3</div>
-                      <div className="font-semibold truncate text-lg">{top3[2].username}</div>
+                      <div className="font-semibold truncate text-lg"><Link to={`/users/${top3[2].user_id}`} className="hover:underline">{top3[2].username}</Link></div>
                       <div className="font-bold">{top3[2].xp} XP</div>
                     </div>
                   ) : <div className="w-full max-w-xs" />}
@@ -154,7 +154,7 @@ export default function XPLeaderboard() {
                   {rest.map((u, j) => (
                     <tr key={u.user_id} className="border-t border-zinc-800">
                       <td className="px-3 py-2 align-top">#{j + 4}</td>
-                      <td className="px-3 py-2 align-top">{u.username}</td>
+                      <td className="px-3 py-2 align-top"><Link to={`/users/${u.user_id}`} className="hover:underline">{u.username}</Link></td>
                       <td className="px-3 py-2 align-top font-bold">{u.xp}</td>
                     </tr>
                   ))}

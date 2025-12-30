@@ -7,13 +7,16 @@ import Leaderboard from "./pages/Leaderboard";
 import XPLeaderboard from "./pages/XPLeaderboard";
 import HRs from "./pages/HRs";
 import LRs from "./pages/LRs";
+import Search from "./pages/Search";
+import UserProfile from "./pages/UserProfile";
 import Hierarchy from "./pages/Hierarchy";
 import AdminPanel from "./pages/AdminPanel";
-import AdminHierarchy from "./pages/AdminHierarchy"; // NEW
+import AdminHierarchy from "./pages/AdminHierarchy"; 
 import LoginPage from "./pages/LoginPage";
 import { useAuth } from "./context/AuthContext";  
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import AuthRedirect from './pages/AuthRedirect';
+import WelcomeMessagesAdmin from './pages/WelcomeMessagesAdmin';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,6 +28,7 @@ function App() {
     { to: "/leaderboard", label: "Leaderboard" },
     { to: "/hrs", label: "HRs" },
     { to: "/lrs", label: "LRs" },
+    { to: "/search", label: "Search" },
   ];
 
   // Reactive admin route detection
@@ -41,6 +45,13 @@ function App() {
       if (el) el.focus();
     }
   }, [menuOpen]);
+
+  // Close mobile menu when the route changes and focus main content for accessibility
+  useEffect(() => {
+    setMenuOpen(false);
+    const main = document.getElementById('main');
+    if (main) main.focus();
+  }, [location.pathname]);
 
   // Close mobile menu with Escape key
   useEffect(() => {
@@ -288,12 +299,14 @@ function App() {
       </nav>
 
       {/* Page Routes */}
-      <main id="main" className="pt-20 bg-black min-h-screen">
+      <main id="main" tabIndex={-1} className="pt-20 bg-black min-h-screen">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/users" element={<XPLeaderboard />} />
+          <Route path="/users/:id" element={<UserProfile />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/hrs" element={<HRs />} />
           <Route path="/lrs" element={<LRs />} />
           <Route path="/hierarchy" element={<Hierarchy />} />
@@ -313,11 +326,18 @@ function App() {
             path="/admin/hierarchy" 
             element={
               <ProtectedRoute>
-                <AdminHierarchy /> {/* Changed from HierarchyManager */}
+                <AdminHierarchy /> 
               </ProtectedRoute>
             } 
           />
-          
+          <Route 
+            path="/admin/welcome-messages" 
+            element={
+              <ProtectedRoute>
+                <WelcomeMessagesAdmin />
+              </ProtectedRoute>
+            } 
+          /> 
           {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -211,8 +211,8 @@ export default function Leaderboard() {
                 style={{ animationDelay: `${i * 120}ms` }}
               >
                 <span className="font-semibold">
-                  {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`}{" "}
-                  {u.username}
+                  {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`} {" "}
+                  <Link to={`/users/${u.user_id}`} className="hover:underline">{u.username}</Link>
                 </span>
                 <span className="font-bold">
                   {u.xp} XP

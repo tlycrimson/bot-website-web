@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 
 /* =========================
    RANK ORDER
@@ -166,7 +167,7 @@ const DivisionTable = ({ id, title, data, theme, tall = false, loading = false }
                   <div className="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <RankInsignia rank={user.rank} />
-                      <span className="font-semibold truncate">{user.username}</span>
+                      <Link to={`/users/${user.user_id}`} className="font-semibold truncate hover:underline">{user.username}</Link>
                     </div>
                     <RankBadge rank={user.rank} />
                   </div>

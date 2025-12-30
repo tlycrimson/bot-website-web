@@ -28,6 +28,12 @@ export default function Home() {
       icon: <Trophy className="w-5 h-5 inline mr-2" />,
       style: "bg-black/30 border border-red-500 text-red-300 hover:bg-red-600 hover:text-white",
     },
+    {
+      title: "Search Users",
+      link: "/search",
+      icon: <Users className="w-5 h-5 inline mr-2" />,
+      style: "bg-black/30 border border-red-500 text-red-300 hover:bg-red-600 hover:text-white",
+    },
   ];
 
   return (

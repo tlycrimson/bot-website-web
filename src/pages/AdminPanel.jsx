@@ -19,7 +19,8 @@ import {
   Key,
   Layers,
   AlertCircle,
-  Loader2
+  Loader2,
+  MessageSquare
 } from "lucide-react";
 
 // Rank options based on division and type (HR/LR)
@@ -637,6 +638,16 @@ export default function AdminPanel() {
             >
               <Layers className="inline-block w-5 h-5 mr-2" />
               Hierarchy Editor
+            </button>
+
+            <button
+              onClick={() => navigate('/admin/welcome-messages')}
+              className={`px-6 py-3 font-semibold transition-all ${
+                false ? 'border-b-2 border-red-500 text-red-400' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              <MessageSquare className="inline-block w-5 h-5 mr-2" />
+              Welcome Messages
             </button>
           </div>
         </motion.header>
